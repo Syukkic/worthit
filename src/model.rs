@@ -88,9 +88,6 @@ impl Product {
         if let Some(sd) = sold_date {
             self.sold_date = Some(sd);
         }
-        if let Some(sd) = sold_date {
-            self.sold_date = Some(sd);
-        }
 
         if let Some(s) = status {
             self.status = Some(s)
