@@ -85,10 +85,6 @@ impl Product {
         if let Some(pd) = purchase_date {
             self.purchase_date = pd;
         }
-        if let Some(sd) = sold_date {
-            self.sold_date = Some(sd);
-        }
-
         if let Some(s) = status {
             self.status = Some(s)
         }
@@ -97,6 +93,7 @@ impl Product {
         self.repair_count = repair_count.or(self.repair_count);
         self.repair_cost = repair_cost.or(self.repair_cost);
         self.sold_price = sold_price.or(self.sold_price);
+        self.sold_date = sold_date.or(self.sold_date);
     }
 }
 
