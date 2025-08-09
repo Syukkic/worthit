@@ -16,8 +16,6 @@ pub struct ProductTable {
     #[tabled(rename = "狀態")]
     status: Status,
 
-    // #[tabled(rename = "使用次數")]
-    // usage_count: u32,
     #[tabled(rename = "維修次數")]
     repair_count: String,
 

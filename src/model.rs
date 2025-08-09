@@ -45,7 +45,6 @@ pub struct Product {
     pub price: f64,
     pub purchase_date: NaiveDate,
     pub status: Option<Status>,
-    // pub usage_count: Option<u32>,
     pub repair_count: Option<u32>,
     pub repair_cost: Option<f64>,
     pub sold_price: Option<f64>,
@@ -59,7 +58,6 @@ impl Product {
             price,
             purchase_date,
             status: Some(Status::Active),
-            // usage_count: None,
             repair_count: None,
             repair_cost: None,
             sold_price: None,
@@ -73,7 +71,6 @@ impl Product {
         price: Option<f64>,
         purchase_date: Option<NaiveDate>,
         status: Option<Status>,
-        // usage_count: Option<u32>,
         repair_count: Option<u32>,
         repair_cost: Option<f64>,
         sold_price: Option<f64>,
@@ -89,7 +86,6 @@ impl Product {
             self.status = Some(s)
         }
 
-        // self.usage_count = usage_count.or(self.usage_count);
         self.repair_count = repair_count.or(self.repair_count);
         self.repair_cost = repair_cost.or(self.repair_cost);
         self.sold_price = sold_price.or(self.sold_price);
@@ -108,7 +104,7 @@ impl Records {
             return Ok(Self::new());
         }
         let content = fs::read_to_string(file_path)
-            .with_context(|| format!("Failed to read `record.json` file: {}", file_path))?;
+            .with_context(|| format!("Failed to read `records.json` file: {}", file_path))?;
         let records: Records = serde_json::from_str(&content)?;
 
         Ok(records)

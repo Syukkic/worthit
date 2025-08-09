@@ -1,7 +1,12 @@
 use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
-#[command(version, about="敗家記錄", long_about = None, disable_help_subcommand = true)]
+#[command(
+    version,
+    about = "記錄買過咩東西",
+    long_about = "大額商品總是希望可以耐用不易壞，記錄買過啲貴嘢睇下可以用幾耐",
+    disable_help_subcommand = true
+)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
@@ -37,8 +42,6 @@ pub enum Commands {
         )]
         status: Option<u32>,
 
-        // #[arg(long, help = "用咗幾次")]
-        // usage_count: Option<u32>,
         #[arg(long, help = "整咗幾次")]
         repair_count: Option<u32>,
 
