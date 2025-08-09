@@ -26,10 +26,10 @@ pub fn add_handler(
     record_path: String,
 ) -> Result<()> {
     if name.is_empty() {
-        anyhow::bail!("product name can't not be empty.")
+        anyhow::bail!("Product name can't not be empty.")
     }
     if price <= 0.0 {
-        anyhow::bail!("price must be greater than 0.")
+        anyhow::bail!("Price must be greater than 0.")
     }
     let purchase_date =
         NaiveDate::parse_from_str(&purchase_date, "%Y-%m-%d").with_context(|| {
@@ -48,7 +48,8 @@ pub fn add_handler(
 
 #[allow(clippy::too_many_arguments)]
 pub fn set_handler(
-    name: Option<String>,
+    current_name: Option<String>,
+    new_name: Option<String>,
     price: Option<f64>,
     purchase_date: Option<String>,
     status: Option<u32>,
@@ -59,16 +60,24 @@ pub fn set_handler(
     mut records: Records,
     record_path: String,
 ) -> Result<()> {
-    let product_name = name
+    let current_product_name = current_name
         .as_ref()
         .ok_or_else(|| anyhow::anyhow!("Name is required"))?;
-    let product = records.get_product_mut(product_name)?;
+
+    let lookup_product = match &new_name {
+        Some(new_name) => {
+            records.rename_product(current_product_name, new_name.into())?;
+            new_name
+        }
+        None => current_product_name,
+    };
+    let product = records.get_product_mut(lookup_product)?;
 
     let validated_price = price
         .map(|price| {
             (price > 0.0)
                 .then_some(price)
-                .ok_or_else(|| anyhow::anyhow!("price must be greater than 0"))
+                .ok_or_else(|| anyhow::anyhow!("Price must be greater than 0"))
         })
         .transpose()?;
 
@@ -89,7 +98,7 @@ pub fn set_handler(
         .map(|cost| {
             (cost > 0.0)
                 .then_some(cost)
-                .ok_or_else(|| anyhow::anyhow!("cost price must be greater than 0"))
+                .ok_or_else(|| anyhow::anyhow!("Cost price must be greater than 0"))
         })
         .transpose()?;
 
@@ -97,7 +106,7 @@ pub fn set_handler(
     let sold_price_result = sold_price.map(|price| {
         (price > 0.0)
             .then_some(price)
-            .ok_or_else(|| anyhow::anyhow!("sold price can't be negative"))
+            .ok_or_else(|| anyhow::anyhow!("Sold price can't be negative"))
     });
     let sold_date_result = sold_date.map(|date_str| {
         NaiveDate::parse_from_str(&date_str, "%Y-%m-%d").with_context(|| {

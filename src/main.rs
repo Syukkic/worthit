@@ -27,6 +27,7 @@ fn main() -> Result<()> {
         } => add_handler(name, price, purchase_date, records, record_path)?,
         Commands::Set {
             name,
+            new_name,
             price,
             purchase_date,
             status,
@@ -36,6 +37,7 @@ fn main() -> Result<()> {
             sold_date,
         } => set_handler(
             name,
+            new_name,
             price,
             purchase_date,
             status,

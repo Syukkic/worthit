@@ -25,8 +25,11 @@ pub enum Commands {
         purchase_date: String,
     },
     Set {
-        #[arg(short = 'n', long, help = "佢個名")]
+        #[arg(short = 'n', long = "current-name", help = "佢個名")]
         name: Option<String>,
+
+        #[arg(long = "new-name", help = "起個新名")]
+        new_name: Option<String>,
 
         #[arg(short = 'p', long, help = "幾钱")]
         price: Option<f64>,

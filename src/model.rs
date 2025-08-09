@@ -119,7 +119,7 @@ impl Records {
     pub fn add_product(&mut self, product: Product) -> Result<()> {
         if self.products.contains_key(&product.name) {
             return Err(anyhow!(
-                "product name `{}` already exists. choose another one",
+                "Product name `{}` already exists. choose another one",
                 product.name
             ));
         }
@@ -148,5 +148,15 @@ impl Records {
 
     pub fn list_products(&self) -> Vec<&Product> {
         self.products.values().collect()
+    }
+
+    pub fn rename_product(&mut self, current_name: &str, new_name: String) -> Result<()> {
+        if self.products.contains_key(&new_name) {
+            anyhow::bail!("Product name `{}` already exists", new_name);
+        }
+        let mut product = self.remove_product(current_name)?;
+        product.name = new_name.clone();
+        self.products.insert(new_name, product);
+        Ok(())
     }
 }
