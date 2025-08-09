@@ -17,13 +17,10 @@ mod utils;
 
 fn main() -> Result<()> {
     // let record_path = "records.json";
-    let binding = setup_records_file()?;
-    let record_path = binding
-        .to_str()
-        .ok_or_else(|| anyhow!("Invalid UTF-8 in record file path"))?;
+    let record_path = setup_records_file()?;
 
     let cli = Cli::parse();
-    let mut records = Records::load(record_path)?;
+    let mut records = Records::load(&record_path)?;
 
     match cli.command {
         Commands::Add {
@@ -47,13 +44,12 @@ fn main() -> Result<()> {
             let product = Product::new(name, price, purchase_date);
 
             records.add_product(product)?;
-            records.save(record_path)?;
+            records.save(&record_path)?;
         }
         Commands::Set {
             name,
             price,
             purchase_date,
-            // usage_count,
             status,
             repair_count,
             repair_cost,
@@ -130,7 +126,7 @@ fn main() -> Result<()> {
                 validated_sold_price,
                 parsed_sold_date,
             );
-            records.save(record_path)?;
+            records.save(&record_path)?;
         }
         Commands::Show => {
             let products: Vec<ProductTable> = records
@@ -148,7 +144,7 @@ fn main() -> Result<()> {
         Commands::Delete { name } => {
             if let Some(name) = name {
                 records.remove_product(&name)?;
-                records.save(record_path)?;
+                records.save(&record_path)?;
             } else {
                 let product_names: Vec<String> = records.products.keys().cloned().collect();
                 if product_names.is_empty() {
@@ -163,7 +159,7 @@ fn main() -> Result<()> {
 
                 let selected_name = &product_names[target];
                 records.remove_product(selected_name)?;
-                let _ = records.save(record_path);
+                let _ = records.save(&record_path);
                 println!("Deleted product: {}", selected_name);
             }
         }
