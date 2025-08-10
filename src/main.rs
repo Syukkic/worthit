@@ -1,11 +1,8 @@
 use anyhow::Result;
 use clap::Parser;
-use cli::{Cli, Commands};
+use cli::Cli;
 
-use crate::{
-    model::Records,
-    utils::{add_handler, delete_handler, set_handler, setup_records_file, show_handler},
-};
+use crate::{cli::CommandHandler, model::Records, utils::setup_records_file};
 
 mod cli;
 mod display;
@@ -18,41 +15,7 @@ fn main() -> Result<()> {
 
     let cli = Cli::parse();
     let records = Records::load(&record_path)?;
-
-    match cli.command {
-        Commands::Add {
-            name,
-            price,
-            purchase_date,
-        } => add_handler(name, price, purchase_date, records, record_path)?,
-        Commands::Set {
-            name,
-            new_name,
-            price,
-            purchase_date,
-            status,
-            repair_count,
-            repair_cost,
-            sold_price,
-            sold_date,
-        } => set_handler(
-            name,
-            new_name,
-            price,
-            purchase_date,
-            status,
-            repair_count,
-            repair_cost,
-            sold_price,
-            sold_date,
-            records,
-            record_path,
-        )?,
-        Commands::Show => {
-            show_handler(records);
-        }
-        Commands::Delete { name } => delete_handler(name, records, record_path)?,
-    }
+    cli.command.handle(records, record_path)?;
 
     Ok(())
 }

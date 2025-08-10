@@ -1,4 +1,10 @@
+use anyhow::Result;
 use clap::{Parser, Subcommand};
+
+use crate::{
+    model::Records,
+    utils::{add_handler, delete_handler, set_handler, show_handler},
+};
 
 #[derive(Parser, Debug)]
 #[command(
@@ -62,4 +68,48 @@ pub enum Commands {
         #[arg(short, long, help = "要 delete 咩？（或者唔指定名稱開啓交互模式）")]
         name: Option<String>,
     },
+}
+
+pub trait CommandHandler {
+    fn handle(self, records: Records, record_path: String) -> Result<()>;
+}
+
+impl CommandHandler for Commands {
+    fn handle(self, records: Records, record_path: String) -> Result<()> {
+        match self {
+            Commands::Add {
+                name,
+                price,
+                purchase_date,
+            } => add_handler(name, price, purchase_date, records, record_path),
+            Commands::Set {
+                name,
+                new_name,
+                price,
+                purchase_date,
+                status,
+                repair_count,
+                repair_cost,
+                sold_price,
+                sold_date,
+            } => set_handler(
+                name,
+                new_name,
+                price,
+                purchase_date,
+                status,
+                repair_count,
+                repair_cost,
+                sold_price,
+                sold_date,
+                records,
+                record_path,
+            ),
+            Commands::Show => {
+                show_handler(records);
+                Ok(())
+            }
+            Commands::Delete { name } => delete_handler(name, records, record_path),
+        }
+    }
 }
