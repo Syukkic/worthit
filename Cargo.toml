@@ -16,3 +16,5 @@ tabled = "0.20.0"
 [profile.release]
 lto = true
 opt-level = "z"
+codegen-units = 1
+strip = true 
