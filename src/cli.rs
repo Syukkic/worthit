@@ -71,11 +71,11 @@ pub enum Commands {
 }
 
 pub trait CommandHandler {
-    fn handle(self, records: Records, record_path: String) -> Result<()>;
+    fn execute(self, records: Records, record_path: String) -> Result<()>;
 }
 
 impl CommandHandler for Commands {
-    fn handle(self, records: Records, record_path: String) -> Result<()> {
+    fn execute(self, records: Records, record_path: String) -> Result<()> {
         match self {
             Commands::Add {
                 name,

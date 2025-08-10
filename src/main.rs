@@ -15,7 +15,7 @@ fn main() -> Result<()> {
 
     let cli = Cli::parse();
     let records = Records::load(&record_path)?;
-    cli.command.handle(records, record_path)?;
+    cli.command.execute(records, record_path)?;
 
     Ok(())
 }
